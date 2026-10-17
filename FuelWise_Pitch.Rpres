@@ -1,0 +1,63 @@
+FuelWise: Plan Smarter Road Trips
+========================================================
+author: Vikranth Vijaykumar
+date: October 17, 2026
+css: pitch.css
+font-family: 'Arial'
+autosize: true
+
+*A data-powered road trip fuel estimator built with R Shiny.*
+
+A Simple Question, Answered Clearly
+========================================================
+
+### How much fuel might a road trip cost?
+
+- Fuel costs change with **distance**, **gasoline price**, and **efficiency**.
+- Comparing car groups by average MPG is easier than interpreting raw road-test rows.
+- FuelWise turns a historical data set into a simple, interactive teaching tool.
+
+**Objective:** estimate gallons and dollars from a few inputs, without uploading a file.
+
+The App: Four Inputs, Live Calculations
+========================================================
+
+- **Cylinders:** 4, 6, or 8
+- **Transmission:** All, Automatic, Manual
+- **Trip distance:** 50–3,000 miles
+- **Fuel price:** $1.50–$8.00 per gallon
+
+When an input changes, server-side reactive expressions update the MPG sample, fuel needed, estimated cost, and two charts.
+
+**Formula:** `fuel_cost = miles / mean(selected_mpg) * price_per_gallon`
+
+Reproducible R Calculation
+========================================================
+
+The following code **runs when RStudio Presenter processes this file**:
+
+```{r fuelwise-example, echo=TRUE, results='markup'}
+selected <- subset(mtcars, cyl == 6 & am == 0)
+mpg_mean <- mean(selected$mpg)
+trip_cost <- 500 / mpg_mean * 3.50
+cat(sprintf("Cars: %d | Mean MPG: %.3f | Fuel cost: $%.2f", 
+            nrow(selected), mpg_mean, trip_cost))
+```
+
+Change the inputs on the Shiny website to see new results.
+
+Why FuelWise Deserves a Look
+========================================================
+
+### A working data-to-decision loop
+
+```{r fuelwise-chart, echo=FALSE, fig.width=7.2, fig.height=3.3}
+means <- tapply(mtcars$mpg, mtcars$cyl, mean)
+barplot(means, col=c("#21bda7", "#59a7c4", "#0b4a73"),
+        ylim=c(0, 30), border=NA, ylab="Average MPG", 
+        xlab="Engine cylinders", main="Historic mileage by cylinder group")
+```
+
+**Why it works:** clear instructions within the app, transparent arithmetic, reactive visuals, and built-in R data.
+
+*Note: `mtcars` is a small historical sample, not a modern fuel-efficiency forecast.*
